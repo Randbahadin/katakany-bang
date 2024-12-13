@@ -1,5 +1,7 @@
 {
-  "name": "your-project-name", 
+  "scripts": {
+    "build": "echo 'No build step required for this site.'" 
+  }", 
   "version": "1.0.0",
   "description": "A brief description of your project",
   "main": "index.js",  
