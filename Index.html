@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بانگ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kurdish:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: 'Noto Sans Kurdish', sans-serif;
+      background-color: #f8f9fa;
+      color: #2c3e50;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: #4b9cd3;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    select {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-bottom: 30px;
+      border: 2px solid #4b9cd3;
+      border-radius: 5px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+    }
+
+    #prayer-times {
+      text-align: center;
+      max-width: 600px;
+      background-color: #ffffff;
+      padding: 30px;
+      margin-top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .prayer-time {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 12px 20px;
+      margin: 5px 0;
+      background-color: #f4f7fa;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      font-size: 1.2rem;
+      color: #34495e;
+      transition: background-color 0.3s ease;
+    }
+
+    .prayer-time:hover {
+      background-color: #e1e9f0;
+    }
+
+    .prayer-name {
+      font-weight: 600;
+    }
+
+    .prayer-time span {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    #loading {
+      display: none;
+      font-size: 1.3rem;
+      color: #ff4500;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    #google-ad {
+      margin-top: 40px;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* Button Style */
+    .btn {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>بانگ</h1>
+  <select id="city-selector">
+    <option value="" disabled selected>شوێنەکە دیاری بکە</option>
+    <option value="Sulaimany">سلێمانی</option>
+    <option value="Duhok">دهۆک</option>
+    <option value="Hawler">هەولێر</option>
+  </select>
+
+  <div id="prayer-times"></div>
+  <div id="loading">چاوەڕێ دەکرێت...</div>
+
+  <!-- Google AdSense Ad Code -->
+  <div id="google-ad">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"   <!-- Replace with your AdSense client ID -->
+         data-ad-slot="xxxxxxxxxx"                   <!-- Replace with your AdSense slot ID -->
+         data-ad-format="auto"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <script>
+    // Cities prayer times
+    const cities = {
+      Sulaimany: {
+        Fajr: "05:34",
+        Dhuhr: "07:00",
+        Asr: "11:59",
+        Maghrib: "02:30",
+        Isha: "04:55"
+      },
+      Duhok: {
+        Fajr: "05:36",
+        Dhuhr: "07:11",
+        Asr: "12:11",
+        Maghrib: "02:42",
+        Isha: "04:57"
+      },
+      Hawler: {
+        Fajr: "05:55",
+        Dhuhr: "07:12",
+        Asr: "12:10",
+        Maghrib: "02:37",
+        Isha: "04:57"
+      },
+    };
+
+    const prayerNamesKu = {
+      Fajr: "فەجر",
+      Dhuhr: "نیوەڕۆ",
+      Asr: "عەسر",
+      Maghrib: "مەغریب",
+      Isha: "عیشا"
+    };
+
+    const citySelector = document.getElementById('city-selector');
+    const prayerTimesContainer = document.getElementById('prayer-times');
+    const loadingIndicator = document.getElementById('loading');
+    const notificationPermissions = ['default', 'granted'];
+
+    function displayPrayerTimes(prayerTimes) {
+      prayerTimesContainer.innerHTML = '';
+      Object.entries(prayerTimes).forEach(([prayer, time]) => {
+        const prayerTimeElement = document.createElement('div');
+        prayerTimeElement.classList.add('prayer-time');
+
+        const prayerNameElement = document.createElement('span');
+        prayerNameElement.classList.add('prayer-name');
+        prayerNameElement.textContent = prayerNamesKu[prayer];
+
+        const prayerTimeValueElement = document.createElement('span');
+        prayerTimeValueElement.textContent = time;
+
+        prayerTimeElement.appendChild(prayerNameElement);
+        prayerTimeElement.appendChild(prayerTimeValueElement);
+        prayerTimesContainer.appendChild(prayerTimeElement);
+      });
+
+      setNotifications(prayerTimes);  // Set notifications for all prayer times
+    }
+
+    function setNotifications(prayerTimes) {
+      // Request permission for notifications if not granted
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+
+      Object.entries(prayerTimes).forEach(([prayer, time]) => {
+        const [hours, minutes] = time.split(":").map(Number);
+        const now = new Date();
+        const prayerTime = new Date(now.setHours(hours, minutes, 0, 0));
+
+        // If the prayer time is in the future, create a notification
+        if (prayerTime > new Date()) {
+          setTimeout(() => {
+            sendNotification(prayer, time);
+          }, prayerTime - new Date());
+        }
+      });
+    }
+
+    function sendNotification(prayer, time) {
+      if (Notification.permission === "granted") {
+        new Notification(`وقت پرسی: ${prayerNamesKu[prayer]} - ${time}`);
+      }
+    }
+
+    citySelector.addEventListener('change', function () {
+      const city = citySelector.value;
+      if (!city || !cities[city]) {
+        return;
+      }
+
+      loadingIndicator.style.display = 'block';
+      try {
+        const prayerTimes = cities[city];
+        displayPrayerTimes(prayerTimes);
+      } catch (error) {
+        prayerTimesContainer.innerHTML = '<p class="error">هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدە.</p>';
+        console.error(error);
+      } finally {
+        loadingIndicator.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+
+</html>
