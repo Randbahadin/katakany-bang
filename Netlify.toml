@@ -1,7 +1,0 @@
-[build]
-  publish = ""  # Leave blank since your index.html is at the root
-  command = ""  # Leave blank if you have no build process
-
-[dev]  # Optional: For local development with Netlify Dev
-  port = 8080  # Or any port you prefer
-  publish = "" # Same as the build.publish setting above
