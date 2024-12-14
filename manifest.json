@@ -3,12 +3,12 @@
   "short_name": "بانگ",
   "icons": [
     {
-      "src": "mosque.png", 
+      "src": "mosque.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "mosque-512x512.png", 
+      "src": "mosque-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -16,14 +16,12 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f9fa",
-  "theme_color": "#008000" 
-}
-{
+  "theme_color": "#008000",
   "widgets": [
     {
       "name": "Current Prayer Time",
       "short_name": "Prayer Time",
-      "description": "Displays the current prayer time",
+      "description": "Displays the current prayer time for your selected city.", 
       "sizes": [
         "1x1", 
         "2x1", 
