@@ -4,10 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بانگ</title>
+  <title>کاتەکانی بانگ</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kurdish:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    @font-face {
+      font-family: 'NizarNastaliqKurdish';
+      src: url('NizarNastaliqKurdish.ttf') format('truetype');
+    }
+
     body {
       font-family: 'Noto Sans Kurdish', sans-serif;
       background-color: #f8f9fa;
@@ -19,20 +24,25 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     h1 {
       margin-bottom: 20px;
       font-size: 2.5rem;
-      color: #4b9cd3;
+      color: #008000;
+      /* Changed to green */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-family: 'NizarNastaliqKurdish', sans-serif;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
     select {
       padding: 10px 20px;
       font-size: 18px;
       margin-bottom: 30px;
-      border: 2px solid #4b9cd3;
+      border: 2px solid #008000;
+      /* Changed to green */
       border-radius: 5px;
       background-color: #fff;
       transition: all 0.3s ease;
@@ -40,8 +50,9 @@
 
     select:focus {
       outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+      border-color: #006400;
+      /* Changed to dark green */
+      box-shadow: 0 0 10px rgba(0, 128, 0, 0.5);
     }
 
     #prayer-times {
@@ -55,6 +66,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .prayer-time {
@@ -66,10 +78,11 @@
       margin: 5px 0;
       background-color: #f4f7fa;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 5px rgba(0, 128, 0, 0.5);
+      /* Green box shadow */
       font-size: 1.2rem;
       color: #34495e;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .prayer-time:hover {
@@ -78,11 +91,13 @@
 
     .prayer-name {
       font-weight: 600;
+      transition: color 0.3s ease;
     }
 
     .prayer-time span {
       font-size: 1.1rem;
       color: #555;
+      transition: color 0.3s ease;
     }
 
     #loading {
@@ -90,12 +105,14 @@
       font-size: 1.3rem;
       color: #ff4500;
       font-weight: bold;
+      transition: color 0.3s ease;
     }
 
     .error {
       color: #e74c3c;
       font-size: 1.1rem;
       font-weight: bold;
+      transition: color 0.3s ease;
     }
 
     #google-ad {
@@ -120,13 +137,94 @@
       background-color: #2980b9;
       transform: scale(1.05);
     }
+
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+
+    body.dark-mode h1 {
+      color: #07B107;
+      /* Changed to dark green */
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode select {
+      background-color: #343A40;
+      color: #F8F9FA;
+      border-color: #519E2F;
+    }
+
+    body.dark-mode #prayer-times {
+      background-color: #343a40;
+      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .prayer-time {
+      background-color: #212529;
+      color: #f8f9fa;
+      box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .prayer-time:hover {
+      background-color: #495057;
+    }
+
+    body.dark-mode .prayer-name {
+      color: #f8f9fa;
+    }
+
+    body.dark-mode .prayer-time span {
+      color: #ced4da;
+    }
+
+    body.dark-mode #loading {
+      color: #ffc107;
+    }
+
+    body.dark-mode .error {
+      color: #f05454;
+    }
+
+    #mode-toggle {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      /* Moved to the left */
+      background-color: transparent;
+      /* Backg                            round color same as body */
+      border: none;
+      font-size: 20px;
+      /* Made a little bigger */
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: rotate 2s linear infinite;
+      /* Added rotation animation */
+    }
+
+    #mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
 <body>
-  <h1>کاتەکانی بانگ</h1>
+  <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button>
+  <h1><i class="fa-solid fa-mosque"></i> کاتەکانی بانگ لە <span id="city-name"></span></h1>
   <select id="city-selector">
-    <option value="" disabled selected>شوێنەکە دیاری بکە</option>
+    <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
     <option value="Sulaimany">سلێمانی</option>
     <option value="Duhok">دهۆک</option>
     <option value="Hawler">هەولێر</option>
@@ -135,47 +233,25 @@
   <div id="prayer-times"></div>
   <div id="loading">چاوەڕێ دەکرێت...</div>
 
-  <!-- Google AdSense Ad Code -->
   <div id="google-ad">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7067075846954422"   <!-- Replace with your AdSense client ID -->
-         data-ad-slot="xxxxxxxxxx"                   <!-- Replace with your AdSense slot ID -->
-         data-ad-format="auto"></ins>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7067075846954422"
+      data-ad-slot="xxxxxxxxxx" data-ad-format="auto"></ins>
     <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
+      (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
   </div>
 
   <script>
-    // Cities prayer times
     const cities = {
-      Sulaimany: {
-        Fajr: "05:34",
-        Dhuhr: "07:00",
-        Asr: "11:59",
-        Maghrib: "02:30",
-        Isha: "04:55"
-      },
-      Duhok: {
-        Fajr: "05:36",
-        Dhuhr: "07:11",
-        Asr: "12:11",
-        Maghrib: "02:42",
-        Isha: "04:57"
-      },
-      Hawler: {
-        Fajr: "05:55",
-        Dhuhr: "07:12",
-        Asr: "12:10",
-        Maghrib: "02:37",
-        Isha: "04:57"
-      },
+      Sulaimany: { Fajr: "05:34", Sunrise: "07:00", Dhuhr: "11:59", Asr: "02:30", Maghrib: "04:55", Isha: "06:15" },
+      Duhok: { Fajr: "05:36", Sunrise: "07:11", Dhuhr: "12:11", Asr: "02:42", Maghrib: "04:57", Isha: "06:17" },
+      Hawler: { Fajr: "05:55", Sunrise: "07:12", Dhuhr: "12:10", Asr: "02:37", Maghrib: "04:57", Isha: "06:12" },
     };
 
     const prayerNamesKu = {
       Fajr: "بەیانی",
+      Sunrise: "خۆرهەڵات",
       Dhuhr: "نیوەڕۆ",
       Asr: "عەسر",
       Maghrib: "مەغریب",
@@ -185,7 +261,10 @@
     const citySelector = document.getElementById('city-selector');
     const prayerTimesContainer = document.getElementById('prayer-times');
     const loadingIndicator = document.getElementById('loading');
+    const cityNameSpan = document.getElementById('city-name');
     const notificationPermissions = ['default', 'granted'];
+    const modeToggle = document.getElementById('mode-toggle');
+
 
     function displayPrayerTimes(prayerTimes) {
       prayerTimesContainer.innerHTML = '';
@@ -205,11 +284,10 @@
         prayerTimesContainer.appendChild(prayerTimeElement);
       });
 
-      setNotifications(prayerTimes);  // Set notifications for all prayer times
+      setNotifications(prayerTimes);
     }
 
     function setNotifications(prayerTimes) {
-      // Request permission for notifications if not granted
       if (Notification.permission !== "granted") {
         Notification.requestPermission();
       }
@@ -219,7 +297,6 @@
         const now = new Date();
         const prayerTime = new Date(now.setHours(hours, minutes, 0, 0));
 
-        // If the prayer time is in the future, create a notification
         if (prayerTime > new Date()) {
           setTimeout(() => {
             sendNotification(prayer, time);
@@ -229,26 +306,59 @@
     }
 
     function sendNotification(prayer, time) {
-      if (Notification.permission === "granted") {
-        new Notification(`وقت پرسی: ${prayerNamesKu[prayer]} - ${time}`);
+      if (notificationPermissions.includes(Notification.permission)) {
+        const city = cityNameSpan.textContent;
+
+        let message = "";
+        switch (prayer) {
+          case "Fajr":
+          case "Dhuhr":
+          case "Isha":
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی${city} ${time}`;
+            break;
+          case "Sunrise":
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
+            break;
+          case "Asr":
+          case "Maghrib":
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}ە بە کاتی${city} ${time}`;
+            break;
+        }
+
+        const notification = new Notification('کاتی نوێژە', {
+          body: message,
+          icon: '<i class="fa-solid fa-mosque"></i>'
+        });
       }
     }
 
     citySelector.addEventListener('change', function () {
       const city = citySelector.value;
-      if (!city || !cities[city]) {
-        return;
-      }
+      if (!city || !cities[city]) { return; }
 
       loadingIndicator.style.display = 'block';
+
       try {
         const prayerTimes = cities[city];
         displayPrayerTimes(prayerTimes);
+        cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
+
       } catch (error) {
         prayerTimesContainer.innerHTML = '<p class="error">هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدە.</p>';
         console.error(error);
-      } finally {
-        loadingIndicator.style.display = 'none';
+      } finally { loadingIndicator.style.display = 'none'; }
+    });
+
+
+    // Dark Mode Toggle
+    modeToggle.addEventListener('click', function () {
+      document.body.classList.toggle('dark-mode');
+
+      // Change button icon based on mode
+      if (document.body.classList.contains('dark-mode')) {
+        modeToggle.innerHTML = '<i class="fa-solid fa-sun" style="color: #ffd000;"></i>';
+      } else {
+        modeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
       }
     });
   </script>
