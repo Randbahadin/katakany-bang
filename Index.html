@@ -502,7 +502,13 @@
 
       displayPrayerTimes(prayerTimes);
     }
-
+    // Intro Animation
+    const appContainer = document.getElementById('app-container');
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.body.classList.add('intro-done'); 
+      }, 1000); 
+    });
   </script>
 </body>
 
