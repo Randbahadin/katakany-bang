@@ -232,41 +232,53 @@
       z-index: 1000;
       text-align: center;
     }
+
+    /* Intro Animation Styles */
+    #app-container {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    body.intro-done #app-container {
+      opacity: 1;
+    }
   </style>
 </head>
 
 <body>
-  <div id="cookie-banner">
-    ئەم ماڵپەڕە کوکیز بەکاردەهێنێت بۆ باشترکردنی ئەزموونی بەکارهێنەر. <button id="accept-cookies">قبوڵکردن</button>
-  </div>
+  <div id="app-container">
+    <div id="cookie-banner">
+      ئەم ماڵپەڕە کوکیز بەکاردەهێنێت بۆ باشترکردنی ئەزموونی بەکارهێنەر. <button id="accept-cookies">قبوڵکردن</button>
+    </div>
 
-  <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button>
-  <h1><i class="fa-solid fa-mosque"></i> کاتەکانی بانگ لە <span id="city-name"></span></h1>
-  <select id="city-selector">
-    <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
-    <option value="Sulaimany">سلێمانی</option>
-    <option value="Duhok">دهۆک</option>
-    <option value="Hawler">هەولێر</option>
-  </select>
+    <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button>
+    <h1><i class="fa-solid fa-mosque"></i> کاتەکانی بانگ لە <span id="city-name"></span></h1>
+    <select id="city-selector">
+      <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
+      <option value="Sulaimany">سلێمانی</option>
+      <option value="Duhok">دهۆک</option>
+      <option value="Hawler">هەولێر</option>
+    </select>
 
-  <div id="prayer-times"></div>
-  <div id="loading">چاوەڕێ دەکرێت...</div>
+    <div id="prayer-times"></div>
+    <div id="loading">چاوەڕێ دەکرێت...</div>
 
-  <div id="google-ad">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7067075846954422" data-ad-slot="xxxxxxxxxx"
-      data-ad-format="auto"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <div id="google-ad">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7067075846954422" data-ad-slot="xxxxxxxxxx"
+        data-ad-format="auto"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
   </div>
 
   <script src="PrayTimes.js"></script>
   <script>
     const cities = {
-      Sulaimany: {Fajr: "05:34", Sunrise: "07:00", Dhuhr: "11:59", Asr: "02:30", Maghrib: "04:55", Isha: "06:15"},
-      Duhok: {Fajr: "05:36", Sunrise: "07:11", Dhuhr: "12:11", Asr: "02:42", Maghrib: "04:57", Isha: "06:17"},
-      Hawler: {Fajr: "05:55", Sunrise: "07:12", Dhuhr: "12:10", Asr: "02:37", Maghrib: "04:57", Isha: "06:12"},
+      Sulaimany: { Fajr: "05:34", Sunrise: "07:00", Dhuhr: "11:59", Asr: "02:30", Maghrib: "04:55", Isha: "06:15" },
+      Duhok: { Fajr: "05:36", Sunrise: "07:11", Dhuhr: "12:11", Asr: "02:42", Maghrib: "04:57", Isha: "06:17" },
+      Hawler: { Fajr: "05:55", Sunrise: "07:12", Dhuhr: "12:10", Asr: "02:37", Maghrib: "04:57", Isha: "06:12" },
     };
 
     const prayerNamesKu = {
@@ -288,13 +300,13 @@
     const cookieBanner = document.getElementById('cookie-banner');
     const acceptCookiesButton = document.getElementById('accept-cookies');
 
-
-    // Function to save data to localStorage
-    function saveData(city, prayerTimes) {
+    // Function to save data to localStorage (including dark mode preference)
+    function saveData(city, prayerTimes, isDarkMode) {
       if (window.localStorage) {
         const data = {
           city: city,
-          prayerTimes: prayerTimes
+          prayerTimes: prayerTimes,
+          isDarkMode: isDarkMode
         };
         localStorage.setItem('prayerData', JSON.stringify(data));
       }
