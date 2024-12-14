@@ -246,46 +246,6 @@
       <option value="Hawler">هەولێر</option>
     </select>
 
-    <div class="calendar-container">
-  <h2><i class="fas fa-calendar-alt"></i> ڕۆژژمێر</h2>
-  <div id="calendar"></div>
-</div>
-
-<script>
-  // Function to generate the calendar
-  function generateCalendar() {
-    const calendar = document.getElementById('calendar');
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-
-    const firstDay = (new Date(year, month)).getDay();
-    const daysInMonth = 32 - new Date(year, month, 32).getDate();
-
-    let table = '<table><tr><th>یەک</th><th>دوو</th><th>سێ</th><th>چوار</th><th>پێنج</th><th>شەش</th><th>حەوت</th></tr><tr>';
-
-    let date = 1;
-    for (let i = 0; i < 6; i++) {
-      for (let j = 0; j < 7; j++) {
-        if (i === 0 && j < firstDay) {
-          table += '<td></td>';
-        } else if (date > daysInMonth) {
-          table += '<td></td>';
-        } else {
-          table += '<td>' + date + '</td>';
-          date++;
-        }
-      }
-      table += '</tr>';
-    }
-    table += '</table>';
-    calendar.innerHTML = table;
-  }
-
-  // Call the function to generate the calendar on page load
-  generateCalendar();
-</script>
-
     <div id="google-ad"> 
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7067075846954422" data-ad-slot="xxxxxxxxxx"
