@@ -236,7 +236,7 @@
 </head>
 
 <body>
-  <div id="cookie-banner" style="display: none;">
+  <div id="cookie-banner">
     ئەم ماڵپەڕە کوکیز بەکاردەهێنێت بۆ باشترکردنی ئەزموونی بەکارهێنەر. <button id="accept-cookies">قبوڵکردن</button>
   </div>
 
@@ -261,6 +261,7 @@
     </script>
   </div>
 
+  <script src="PrayTimes.js"></script>
   <script>
     const cities = {
       Sulaimany: {Fajr: "05:34", Sunrise: "07:00", Dhuhr: "11:59", Asr: "02:30", Maghrib: "04:55", Isha: "06:15"},
@@ -288,21 +289,27 @@
     const acceptCookiesButton = document.getElementById('accept-cookies');
 
 
-    // Function to save the selected city to localStorage
-    function saveCity(city) {
+    // Function to save data to localStorage
+    function saveData(city, prayerTimes) {
       if (window.localStorage) {
-        localStorage.setItem('selectedCity', city);
+        const data = {
+          city: city,
+          prayerTimes: prayerTimes
+        };
+        localStorage.setItem('prayerData', JSON.stringify(data));
       }
     }
 
-    // Function to load the saved city from localStorage
-    function loadCity() {
+    // Function to load data from localStorage
+    function loadData() {
       if (window.localStorage) {
-        return localStorage.getItem('selectedCity');
+        const data = localStorage.getItem('prayerData');
+        if (data) {
+          return JSON.parse(data);
+        }
       }
       return null;
     }
-
 
     function displayPrayerTimes(prayerTimes) {
       prayerTimesContainer.innerHTML = '';
@@ -365,14 +372,14 @@
       }
     }
 
-    // Load the saved city on page load
-    const savedCity = loadCity();
-    if (savedCity) {
-      citySelector.value = savedCity;
+    // Load saved data on page load
+    const savedData = loadData();
+    if (savedData) {
+      citySelector.value = savedData.city;
       cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
-      // Trigger the change event to load prayer times for the saved city
-      citySelector.dispatchEvent(new Event('change'));
+      displayPrayerTimes(savedData.prayerTimes);
     }
+
 
     citySelector.addEventListener('change', function () {
       const city = citySelector.value;
@@ -384,7 +391,7 @@
         const prayerTimes = cities[city];
         displayPrayerTimes(prayerTimes);
         cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
-        saveCity(city); // Save the selected city
+        saveData(city, prayerTimes); // Save the city and prayer times
 
       } catch (error) {
         prayerTimesContainer.innerHTML = '<p class="error">هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدە.</p>';
@@ -444,6 +451,46 @@
           });
       });
     }
+
+    // Check if the user has already accepted cookies
+    if (localStorage.getItem('cookiesAccepted')) {
+      cookieBanner.style.display = 'none'; // Hide the banner if cookies are accepted
+    }
+
+    acceptCookiesButton.addEventListener('click', function () {
+      localStorage.setItem('cookiesAccepted', true);
+      cookieBanner.style.display = 'none';
+    });
+
+
+    // Get user's location for prayer times
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        calculatePrayerTimes(lat, lng);
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+
+    function calculatePrayerTimes(lat, lng) {
+      const prayTimes = new PrayTimes();
+      prayTimes.setMethod('Karachi');
+      const times = prayTimes.getTimes(new Date(), [lat, lng], 0);
+
+      const prayerTimes = {
+        Fajr: times.fajr,
+        Sunrise: times.sunrise,
+        Dhuhr: times.dhuhr,
+        Asr: times.asr,
+        Maghrib: times.maghrib,
+        Isha: times.isha
+      };
+
+      displayPrayerTimes(prayerTimes);
+    }
+
   </script>
 </body>
 
