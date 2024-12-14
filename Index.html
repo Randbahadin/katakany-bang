@@ -267,6 +267,22 @@
     const modeToggle = document.getElementById('mode-toggle');
 
 
+    // Function to save the selected city to localStorage
+    function saveCity(city) {
+      if (window.localStorage) {
+        localStorage.setItem('selectedCity', city);
+      }
+    }
+
+    // Function to load the saved city from localStorage
+    function loadCity() {
+      if (window.localStorage) {
+        return localStorage.getItem('selectedCity');
+      }
+      return null;
+    }
+
+
     function displayPrayerTimes(prayerTimes) {
       prayerTimesContainer.innerHTML = '';
       Object.entries(prayerTimes).forEach(([prayer, time]) => {
@@ -333,6 +349,15 @@
       }
     }
 
+    // Load the saved city on page load
+    const savedCity = loadCity();
+    if (savedCity) {
+      citySelector.value = savedCity;
+      cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
+      // Trigger the change event to load prayer times for the saved city
+      citySelector.dispatchEvent(new Event('change'));
+    }
+
     citySelector.addEventListener('change', function () {
       const city = citySelector.value;
       if (!city || !cities[city]) { return; }
@@ -343,13 +368,13 @@
         const prayerTimes = cities[city];
         displayPrayerTimes(prayerTimes);
         cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
+        saveCity(city); // Save the selected city
 
       } catch (error) {
         prayerTimesContainer.innerHTML = '<p class="error">هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدە.</p>';
         console.error(error);
       } finally { loadingIndicator.style.display = 'none'; }
     });
-
 
     // Dark Mode Toggle
     modeToggle.addEventListener('click', function () {
@@ -364,14 +389,41 @@
     });
 
 
+    // Function to display the install prompt
+    function displayInstallPrompt() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+
+        deferredPrompt.userChoice.then(function (choiceResult) {
+          console.log('User choice:', choiceResult.outcome);
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
+
+    // Check if the browser supports the install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', function (event) {
+      event.preventDefault();
+      deferredPrompt = event;
+
+      setTimeout(displayInstallPrompt, 5000); // Show the prompt after 5 seconds
+    });
+
+
     // Register Service Worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
+      window.addEventListener('load', function () {
         navigator.serviceWorker.register('/service-worker.js')
-          .then(function(registration) {
+          .then(function (registration) {
             console.log('Service Worker registered with scope:', registration.scope);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log('Service Worker registration failed:', error);
           });
       });
