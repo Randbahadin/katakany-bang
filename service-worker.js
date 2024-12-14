@@ -26,3 +26,34 @@ self.addEventListener('fetch', function(event) {
           return response;
         }
         return fetch
+
+// Function to display the install prompt
+function displayInstallPrompt() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+
+    deferredPrompt.userChoice.then(function(choiceResult) {
+      console.log('User choice:', choiceResult.outcome);
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null; 
+    });
+  }
+}
+
+// Check if the browser supports the install prompt
+let deferredPrompt; 
+window.addEventListener('beforeinstallprompt', function(event) {
+  event.preventDefault(); 
+  deferredPrompt = event; 
+
+  // You can trigger the prompt here, or at a more appropriate time in your app
+  // For example, you could show a button that the user can click to install the app
+  // displayInstallPrompt(); 
+
+  // Or, you could trigger the prompt after a certain amount of time, or when the user interacts with a specific element
+  setTimeout(displayInstallPrompt, 5000); // Show the prompt after 5 seconds
+});
