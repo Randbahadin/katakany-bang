@@ -7,6 +7,7 @@
   <title>کاتەکانی بانگ</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kurdish:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="manifest" href="manifest.json">
   <style>
     @font-face {
       font-family: 'NizarNastaliqKurdish';
@@ -194,7 +195,7 @@
       left: 20px;
       /* Moved to the left */
       background-color: transparent;
-      /* Backg                            round color same as body */
+      /* Background color same as body */
       border: none;
       font-size: 20px;
       /* Made a little bigger */
@@ -314,14 +315,14 @@
           case "Fajr":
           case "Dhuhr":
           case "Isha":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی${city} ${time}`;
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی ${city} ${time}`;
             break;
           case "Sunrise":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}نە بە کاتی ${city} ${time}`;
             break;
           case "Asr":
           case "Maghrib":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}ە بە کاتی${city} ${time}`;
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}ە بە کاتی ${city} ${time}`;
             break;
         }
 
@@ -361,6 +362,20 @@
         modeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
       }
     });
+
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
   </script>
 </body>
 
