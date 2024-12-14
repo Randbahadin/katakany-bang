@@ -18,3 +18,18 @@
   "background_color": "#f8f9fa",
   "theme_color": "#008000" 
 }
+{
+  "widgets": [
+    {
+      "name": "Current Prayer Time",
+      "short_name": "Prayer Time",
+      "description": "Displays the current prayer time",
+      "sizes": [
+        "1x1", 
+        "2x1", 
+        "4x1" 
+      ],
+      "start_url": "/widget.html" 
+    }
+  ]
+}
