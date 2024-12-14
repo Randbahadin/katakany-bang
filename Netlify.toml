@@ -1,4 +1,5 @@
 [build]
+  image = "netlify/build:xenial" 
   publish = ""  # Leave blank since your index.html is at the root
   command = ""  # Leave blank if you have no build process
 
