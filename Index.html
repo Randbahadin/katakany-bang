@@ -14,6 +14,20 @@
       src: url('NizarNastaliqKurdish.ttf') format('truetype');
     }
 
+    /* Fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+body {
+  animation: fadeIn 1s ease-in-out;
+}
+
     body {
       font-family: 'Noto Sans Kurdish', sans-serif;
       background-color: #f8f9fa;
@@ -517,6 +531,31 @@ setInterval(function() {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
+
+    let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Save the event to trigger later
+  deferredPrompt = e;
+
+  // Show a custom install button
+  const installButton = document.createElement('button');
+  installButton.textContent = 'Install App';
+  installButton.onclick = () => {
+    // Show the install prompt
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      }
+      deferredPrompt = null;
+    });
+  };
+
+  document.body.appendChild(installButton);
+});
 
     function calculatePrayerTimes(lat, lng) {
       const prayTimes = new PrayTimes();
