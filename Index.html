@@ -254,21 +254,30 @@ body.dark-mode #mosque-icon {
 
     body.intro-done #app-container {
       opacity: 1;
-    }
+    }    
 
-    #compass {
+    /* Compass Styles */
+#compass {
   position: fixed;
-  top: 20px;   /* Adjust top margin as needed */
-  left: 20px;  /* Adjust left margin as needed */
-  width: 100px;
-  height: 100px;
-  background-image: url('compass-icon.png');  /* Use your own compass icon */
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
-  display: none;  /* Initially hidden until orientation is detected */
-  transform: rotate(0deg); /* Ensures rotation happens smoothly */
-    }
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+#compass-icon {
+  font-size: 30px;
+  transition: color 0.3s ease;
+}
+
+/* Dark Mode Compass */
+body.dark-mode #compass-icon {
+  color: #FFD43B; /* Yellow color for dark mode */
+}
   </style>
 </head>
 
@@ -278,14 +287,7 @@ body.dark-mode #mosque-icon {
       ئەم ماڵپەڕە کوکیز بەکاردەهێنێت بۆ باشترکردنی ئەزموونی بەکارهێنەر. <button id="accept-cookies">قبوڵکردن</button>
     </div>
 
-    <div id="embeddable-prayer-times">
-
-      <div id="compass" class="compass-icon">
-  <!-- Icon for Light Mode (will be shown in normal mode) -->
-  <i id="light-compass" class="fa-solid fa-compass" style="color: #Ffae00;"></i>
-  <!-- Icon for Dark Mode (will be shown in dark mode) -->
-  <i id="dark-compass" class="fa-solid fa-compass" style="color: #FFD43B;"></i>
-</div> 
+    <div id="embeddable-prayer-times"> 
       
       <h1>
   <img src="mosque-solid.svg">
@@ -313,8 +315,38 @@ body.dark-mode #mosque-icon {
 
     <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
 
+      <!-- Compass div -->
+<div id="compass" class="compass">
+  <i class="fa-solid fa-compass" id="compass-icon" style="color: #Ffae00;"></i> <!-- Normal Mode -->
+</div>
+
   <script src="PrayTimes.js"></script>
   <script>
+// Detect orientation using DeviceOrientationEvent
+let compassIcon = document.getElementById('compass-icon');
+let currentOrientation = 0;
+
+if (window.DeviceOrientationEvent) {
+  window.addEventListener('deviceorientation', function(event) {
+    // Get the compass direction (alpha: the rotation around z-axis)
+    if (event.alpha !== null) {
+      currentOrientation = event.alpha;
+      updateCompass(currentOrientation);
+    }
+  });
+}
+
+function updateCompass(orientation) {
+  // Update the compass rotation based on the orientation angle
+  compassIcon.style.transform = `rotate(${orientation}deg)`;
+}
+
+// Handle dark mode toggle
+const modeToggle = document.getElementById('mode-toggle');
+modeToggle.addEventListener('click', function () {
+  document.body.classList.toggle('dark-mode');
+});
+    
     function generateIframeCode() {
   const city = document.getElementById('city-selector').value;
   const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
@@ -576,54 +608,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
   document.body.appendChild(installButton);
 });
-
-    let compassElement = document.getElementById("compass");
-let directionElement = document.getElementById("compass-direction"); // If you want to display direction text
-
-// Check if the browser supports DeviceOrientationEvent
-if (window.DeviceOrientationEvent) {
-  window.addEventListener("deviceorientation", function(event) {
-    const alpha = event.alpha;  // The device's compass heading in degrees
-
-    if (alpha !== null) {
-      // Show the compass when orientation data is available
-      compassElement.style.display = "block";
-      
-      // Convert alpha (heading in degrees) to compass directions (optional)
-      let direction = getCompassDirection(alpha);
-      if (directionElement) {
-        directionElement.textContent = direction; // Display direction text (optional)
-      }
-      
-      // Rotate the compass to match the heading
-      compassElement.style.transform = `rotate(${alpha}deg)`;
-    }
-  });
-} else {
-  console.log("Device orientation is not supported.");
-}
-
-// Function to convert the alpha value (heading in degrees) into compass directions
-function getCompassDirection(alpha) {
-  if (alpha >= 337.5 || alpha < 22.5) {
-    return "North";
-  } else if (alpha >= 22.5 && alpha < 67.5) {
-    return "Northeast";
-  } else if (alpha >= 67.5 && alpha < 112.5) {
-    return "East";
-  } else if (alpha >= 112.5 && alpha < 157.5) {
-    return "Southeast";
-  } else if (alpha >= 157.5 && alpha < 202.5) {
-    return "South";
-  } else if (alpha >= 202.5 && alpha < 247.5) {
-    return "Southwest";
-  } else if (alpha >= 247.5 && alpha < 292.5) {
-    return "West";
-  } else if (alpha >= 292.5 && alpha < 337.5) {
-    return "Northwest";
-  }
-}
-
+   
     function calculatePrayerTimes(lat, lng) {
       const prayTimes = new PrayTimes();
       prayTimes.setMethod('Karachi');
