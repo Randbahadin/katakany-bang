@@ -21,13 +21,13 @@
     {
       "name": "Current Prayer Time",
       "short_name": "Prayer Time",
-      "description": "Displays the current prayer time for your selected city.", 
+      "description": ".کاتی بانگی ئەو شارەت پێ ئەڵێ کە هەڵت بژاردووە",
       "sizes": [
-        "1x1", 
-        "2x1", 
-        "4x1" 
+        "1x1",
+        "2x1",
+        "4x1"
       ],
-      "start_url": "/widget.html" 
+      "start_url": "/widget.html"
     }
   ]
 }
