@@ -29,25 +29,25 @@
     }
 
     h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2.5rem;
-  color: #008000;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: 'NizarNastaliqKurdish', sans-serif;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: #008000;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-family: 'NizarNastaliqKurdish', sans-serif;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
 
-h1 img {
-  display: block; /* Places the image on its own line */
-  margin: 0 auto 10px; /* Centers the image and adds space below */
-  width: 60px; /* Adjust size as needed */
-  height: auto;
-}
+    h1 img {
+      display: block; /* Places the image on its own line */
+      margin: 0 auto 10px; /* Centers the image and adds space below */
+      width: 60px; /* Adjust size as needed */
+      height: auto;
+    }
 
-body.dark-mode #mosque-icon {
-  content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
-}
+    body.dark-mode #mosque-icon {
+      content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
+    }
 
     select {
       padding: 10px 20px;
@@ -196,7 +196,7 @@ body.dark-mode #mosque-icon {
     #mode-toggle {
       position: absolute;
       top: 20px;
-      right: 20px; 
+      right: 20px;
       background-color: transparent;
       border: none;
       font-size: 20px;
@@ -218,7 +218,6 @@ body.dark-mode #mosque-icon {
         transform: rotate(360deg);
       }
     }
-
 
     #cookie-banner {
       position: fixed;
@@ -278,301 +277,92 @@ body.dark-mode #mosque-icon {
     </div>
 
     <div id="embeddable-prayer-times">
-      
       <h1>
-  <img src="mosque-solid.svg">
-  کاتەکانی بانگ لە <span id="city-name"></span>
+        <img src="mosque-solid.svg">
+        کاتەکانی بانگ لە <span id="city-name"></span>
       </h1>    
-      
-    <select id="city-selector">
-      <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
-      <option value="Sulaimany">سلێمانی</option>
-      <option value="Duhok">دهۆک</option>
-      <option value="Hawler">هەولێر</option>
-    </select>
 
-    <div id="google-ad"> 
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-      <ins class="adsbygoogle" style="display:block;" data-ad-client="ca-pub-7067075846954422" data-ad-slot="xxxxxxxxxx"
-        data-ad-format="auto"></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
+      <select id="city-selector">
+        <option value="" disabled selected>شوێنەت دیاری بکە</option>
+        <option value="hawler">هەولێر</option>
+        <option value="sulaymaniyah">سلێمانی</option>
+        <option value="dohuk">دهۆک</option>
+      </select>
+
+      <div id="prayer-times">
+        <!-- Prayer times will be inserted here -->
+      </div>
+
+      <div id="loading">چاوەڕێ ئەکرێت.../div>
+      <div class="error" id="error-message"></div>
     </div>
 
-    <div id="prayer-times"></div>
-    <div id="loading">چاوەڕێ دەکرێت...</div>
+    <div id="google-ad">
+      <!-- Google AdSense or other advertisements go here -->
+    </div>
 
-      <button id="install-button">Install App</button
-
-    <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
-      <div id="compass" class="compass">
-    <i class="fa-solid fa-compass" id="compass-icon"></i> <!-- Normal Mode -->
-      </div>
+    <button id="mode-toggle">🌙</button>
   </div>
 
-  <script src="PrayTimes.js"></script>
+  <div id="compass">
+    <i id="compass-icon" class="fas fa-compass"></i>
+  </div>
+
   <script>
-    function generateIframeCode() {
-  const city = document.getElementById('city-selector').value;
-  const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
-  const iframeCode = `<iframe src="${window.location.href}?city=${city}&darkmode=${darkMode}" 
-                      width="300" height="200" 
-                      style="border:none;">
-                    </iframe>`;
-  // Display the iframeCode to the user (e.g., in a text box)
-  document.getElementById('iframe-code').textContent = iframeCode;
-    }
-    
-    const cities = {
-      Sulaimany: { Fajr: "05:34", Sunrise: "07:00", Dhuhr: "11:59", Asr: "02:30", Maghrib: "04:55", Isha: "06:15" },
-      Duhok: { Fajr: "05:36", Sunrise: "07:11", Dhuhr: "12:11", Asr: "02:42", Maghrib: "04:57", Isha: "06:17" },
-      Hawler: { Fajr: "05:55", Sunrise: "07:12", Dhuhr: "12:10", Asr: "02:37", Maghrib: "04:57", Isha: "06:12" },
-    };
+    // Handle cookie acceptance
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+      document.getElementById('cookie-banner').style.display = 'none';
+    });
 
-    const prayerNamesKu = {
-      Fajr: "بەیانی",
-      Sunrise: "خۆرهەڵات",
-      Dhuhr: "نیوەڕۆ",
-      Asr: "عەسر",
-      Maghrib: "مەغریب",
-      Isha: "عیشا"
-    };
+    // Dark mode toggle
+    document.getElementById('mode-toggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
 
-    const citySelector = document.getElementById('city-selector');
-    const prayerTimesContainer = document.getElementById('prayer-times');
-    const loadingIndicator = document.getElementById('loading');
-    const cityNameSpan = document.getElementById('city-name');
-    const notificationPermissions = ['default', 'granted'];
-    const modeToggle = document.getElementById('mode-toggle');
-
-    const cookieBanner = document.getElementById('cookie-banner');
-    const acceptCookiesButton = document.getElementById('accept-cookies');
-
-    function saveData(city, prayerTimes, isDarkMode) {
-      if (window.localStorage) {
-        const data = {
-          city: city,
-          prayerTimes: prayerTimes,
-          isDarkMode: isDarkMode
-        };
-        localStorage.setItem('prayerData', JSON.stringify(data));
-      }
-    }
-
-    function loadData() {
-      if (window.localStorage) {
-        const data = localStorage.getItem('prayerData');
-        if (data) {
-          return JSON.parse(data);
-        }
-      }
-      return null;
-    }
-
-    function displayPrayerTimes(prayerTimes) {
-      prayerTimesContainer.innerHTML = '';
-      Object.entries(prayerTimes).forEach(([prayer, time]) => {
-        const prayerTimeElement = document.createElement('div');
-        prayerTimeElement.classList.add('prayer-time');
-
-        const prayerNameElement = document.createElement('span');
-        prayerNameElement.classList.add('prayer-name');
-        prayerNameElement.textContent = prayerNamesKu[prayer];
-
-        const prayerTimeValueElement = document.createElement('span');
-        prayerTimeValueElement.textContent = time;
-
-        prayerTimeElement.appendChild(prayerNameElement);
-        prayerTimeElement.appendChild(prayerTimeValueElement);
-        prayerTimesContainer.appendChild(prayerTimeElement);
-      });
-
-      setNotifications(prayerTimes);
-    }
-
-    function setNotifications(prayerTimes) {
-      if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-      }
-
-      Object.entries(prayerTimes).forEach(([prayer, time]) => {
-        const [hours, minutes] = time.split(":").map(Number);
-        const now = new Date();
-        const prayerTime = new Date(now.setHours(hours, minutes, 0, 0));
-
-        if (prayerTime > new Date()) {
-          setTimeout(() => {
-            sendNotification(prayer, time);
-          }, prayerTime - new Date());
-        }
-      });
-    }
-
-    function sendNotification(prayer, time) {
-      if (notificationPermissions.includes(Notification.permission)) {
-        const city = cityNameSpan.textContent;
-
-        let message = "";
-        switch (prayer) {
-          case "Fajr":
-          case "Dhuhr":
-          case "Isha":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی${city} ${time}`;
-            break;
-          case "Sunrise":
-            message = 'کاتی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
-            break;
-          case "Asr":
-          case "Maghrib":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}ە بە کاتی${city} ${time}`;
-            break;
-        }
-      }
-    }
-
-    const savedData = loadData();
-    if (savedData) {
-      citySelector.value = savedData.city;
-      cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
-      displayPrayerTimes(savedData.prayerTimes);
-
-      if (savedData.isDarkMode) {
-        document.body.classList.add('dark-mode');
-        modeToggle.innerHTML = '<i class="fa-solid fa-sun" style="color: #ffd000;"></i>';
-      }
-    }
-
-    citySelector.addEventListener('change', function () {
-      const city = citySelector.value;
-      if (!city || !cities[city]) { return; }
-
-      loadingIndicator.style.display = 'block';
+    // Function to fetch prayer times
+    async function fetchPrayerTimes(city) {
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('prayer-times').innerHTML = '';
+      document.getElementById('error-message').innerHTML = '';
 
       try {
-        const prayerTimes = cities[city];
-        displayPrayerTimes(prayerTimes);
-        cityNameSpan.textContent = citySelector.options[citySelector.selectedIndex].text;
-        saveData(city, prayerTimes, document.body.classList.contains('dark-mode')); 
-
+        let response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Iraq&method=2`);
+        let data = await response.json();
+        if (data.code === 200) {
+          displayPrayerTimes(data.data.timings);
+        } else {
+          throw new Error('Could not fetch prayer times');
+        }
       } catch (error) {
-        prayerTimesContainer.innerHTML = '<p class="error">هەڵەیەک ڕوویدا، تکایە دووبارە هەوڵ بدە.</p>';
-        console.error(error);
-      } finally { loadingIndicator.style.display = 'none'; }
-    });
-
-    modeToggle.addEventListener('click', function () {
-      document.body.classList.toggle('dark-mode');
-
-      if (document.body.classList.contains('dark-mode')) {
-        modeToggle.innerHTML = '<i class="fa-solid fa-sun" style="color: #ffd000;"></i>';
-      } else {
-        modeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-      }
-
-      saveData(citySelector.value, cities[citySelector.value], document.body.classList.contains('dark-mode'));
-    });
-
-    function displayInstallPrompt() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-
-        deferredPrompt.userChoice.then(function (choiceResult) {
-          console.log('User choice:', choiceResult.outcome);
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          } else {
-            console.log('User dismissed the install prompt');
-          }
-          deferredPrompt = null;
-        });
+        document.getElementById('error-message').textContent = 'هەڵەیەک ڕوویدا کاتەکان ناگوازرێنەوە!';
+      } finally {
+        document.getElementById('loading').style.display = 'none';
       }
     }
 
-    // Check if the browser supports the install prompt
-    // Variable to store the deferred prompt
-let deferredPrompt;
-
-// Capture the 'beforeinstallprompt' event and prevent the default behavior
-window.addEventListener('beforeinstallprompt', function(event) {
-  event.preventDefault();  // Prevent the default install prompt
-  deferredPrompt = event;  // Store the event for later use
-
-  // Show a custom install button (example)
-  const installButton = document.getElementById('install-button');
-  installButton.style.display = 'block';  // Make the install button visible
-
-  // Listen for the button click to show the install prompt
-  installButton.addEventListener('click', function() {
-    // Show the install prompt
-    deferredPrompt.prompt();
-
-    // Wait for the user's response to the prompt
-    deferredPrompt.userChoice.then(function(choiceResult) {
-      console.log('User choice:', choiceResult.outcome);  // Log whether the user accepted or dismissed the prompt
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-      deferredPrompt = null;  // Reset the deferredPrompt variable
-      installButton.style.display = 'none';  // Hide the button after use
-    });
-  });
-
-  // Optionally trigger the prompt after 5 seconds or another event
-  setTimeout(function() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();  // Trigger the prompt after a delay
-    }
-  }, 5000); // Trigger the prompt after 5 seconds
-});
-
-    // Check if the user has already accepted cookies
-    if (localStorage.getItem('cookiesAccepted')) {
-      cookieBanner.style.display = 'none'; // Hide the banner if cookies are accepted
-    }
-
-    acceptCookiesButton.addEventListener('click', function () {
-      localStorage.setItem('cookiesAccepted', true);
-      cookieBanner.style.display = 'none';
-    });
-
-
-    // Get user's location for prayer times
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        calculatePrayerTimes(lat, lng);
+    // Display prayer times
+    function displayPrayerTimes(times) {
+      let timesList = Object.keys(times);
+      timesList.forEach(prayer => {
+        let prayerTime = document.createElement('div');
+        prayerTime.classList.add('prayer-time');
+        prayerTime.innerHTML = `
+          <span class="prayer-name">${prayer}</span>
+          <span>${times[prayer]}</span>
+        `;
+        document.getElementById('prayer-times').appendChild(prayerTime);
       });
-    } else {
-      console.log("Geolocation is not supported by this browser.");
     }
 
-    function calculatePrayerTimes(lat, lng) {
-      const prayTimes = new PrayTimes();
-      prayTimes.setMethod('Karachi');
-      const times = prayTimes.getTimes(new Date(), [lat, lng], 0);
-
-      const prayerTimes = {
-        Fajr: times.fajr,
-        Sunrise: times.sunrise,
-        Dhuhr: times.dhuhr,
-        Asr: times.asr,
-        Maghrib: times.maghrib,
-        Isha: times.isha
-      };
-
-      displayPrayerTimes(prayerTimes);
-    }
-    // Intro Animation
-    const appContainer = document.getElementById('app-container');
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        document.body.classList.add('intro-done'); 
-      }, 1000); 
+    // Handle city selection change
+    document.getElementById('city-selector').addEventListener('change', function () {
+      let city = this.value;
+      document.getElementById('city-name').textContent = city.charAt(0).toUpperCase() + city.slice(1);
+      fetchPrayerTimes(city);
     });
+
+    // Initial state
+    document.getElementById('app-container').classList.add('intro-done');
   </script>
 </body>
 
