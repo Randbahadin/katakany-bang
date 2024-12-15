@@ -238,6 +238,7 @@
       ئەم ماڵپەڕە کوکیز بەکاردەهێنێت بۆ باشترکردنی ئەزموونی بەکارهێنەر. <button id="accept-cookies">قبوڵکردن</button>
     </div>
 
+    <div id="embeddable-prayer-times">
     <h1><i class="fa-solid fa-mosque"></i> کاتەکانی بانگ لە <span id="city-name"></span></h1>
     <select id="city-selector">
       <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
@@ -263,6 +264,17 @@
 
   <script src="PrayTimes.js"></script>
   <script>
+    function generateIframeCode() {
+  const city = document.getElementById('city-selector').value;
+  const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
+  const iframeCode = `<iframe src="${window.location.href}?city=${city}&darkmode=${darkMode}" 
+                      width="300" height="200" 
+                      style="border:none;">
+                    </iframe>`;
+  // Display the iframeCode to the user (e.g., in a text box)
+  document.getElementById('iframe-code').textContent = iframeCode;
+    }
+    
     const cities = {
       Sulaimany: { Fajr: "05:34", Sunrise: "07:00", Dhuhr: "11:59", Asr: "02:30", Maghrib: "04:55", Isha: "06:15" },
       Duhok: { Fajr: "05:36", Sunrise: "07:11", Dhuhr: "12:11", Asr: "02:42", Maghrib: "04:57", Isha: "06:17" },
