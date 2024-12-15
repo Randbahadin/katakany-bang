@@ -475,22 +475,6 @@ modeToggle.addEventListener('click', function () {
       }
     }
 
-    // Refresh the page when the tab is reopened after being closed
-window.addEventListener('beforeunload', function() {
-  localStorage.setItem('pageClosed', 'true');
-});
-
-// Check if the page was closed and reopen the page (force refresh)
-if (localStorage.getItem('pageClosed') === 'true') {
-  localStorage.removeItem('pageClosed');
-  location.reload();
-}
-
-    // Auto refresh every minute (60000ms)
-setInterval(function() {
-  location.reload();
-}, 60000);
-
     // Check if the browser supports the install prompt
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', function (event) {
