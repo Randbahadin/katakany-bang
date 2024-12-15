@@ -255,6 +255,48 @@ body.dark-mode #mosque-icon {
     body.intro-done #app-container {
       opacity: 1;
     }
+
+    #compass {
+  position: fixed;
+  top: 20px;   /* Adjust top margin as needed */
+  left: 20px;  /* Adjust left margin as needed */
+  width: 100px;
+  height: 100px;
+  background-image: url('compass-icon.png');  /* Use your own compass icon */
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  display: none;  /* Initially hidden until orientation is detected */
+  transform: rotate(0deg); /* Ensures rotation happens smoothly */
+    }
+
+    /* Positioning the compass icon at the top-right */
+.light-mode, .dark-mode {
+    position: fixed;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 1000; /* Ensure it's on top */
+}
+
+/* Show the compass for light mode when in light theme */
+body.light-theme .light-mode {
+    display: block;
+}
+
+/* Hide the compass for light mode when in dark theme */
+body.dark-theme .light-mode {
+    display: none;
+}
+
+/* Show the compass for dark mode when in dark theme */
+body.dark-theme .dark-mode {
+    display: block;
+}
+
+/* Hide the compass for dark mode when in light theme */
+body.light-theme .dark-mode {
+    display: none;
+}
   </style>
 </head>
 
@@ -291,10 +333,35 @@ body.dark-mode #mosque-icon {
     <div id="loading">چاوەڕێ دەکرێت...</div>
 
     <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
-  </div>
+
+      <!-- Compass icon for light mode -->
+<i class="fa-solid fa-compass light-mode" style="color: #Ffae00;"></i>
+
+<!-- Compass icon for dark mode -->
+<i class="fa-solid fa-compass dark-mode" style="color: #FFD43B;"></i>
 
   <script src="PrayTimes.js"></script>
   <script>
+// Detect and toggle the theme
+const toggleTheme = () => {
+    if (document.body.classList.contains('light-theme')) {
+        document.body.classList.remove('light-theme');
+        document.body.classList.add('dark-theme');
+    } else {
+        document.body.classList.remove('dark-theme');
+        document.body.classList.add('light-theme');
+    }
+};
+
+// Initialize based on user's preference
+document.body.classList.add(localStorage.getItem('theme') || 'light-theme');
+
+// Optionally, save theme preference to localStorage
+document.body.addEventListener('click', () => {
+    toggleTheme();
+    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme');
+});
+    
     function generateIframeCode() {
   const city = document.getElementById('city-selector').value;
   const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
@@ -556,6 +623,53 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
   document.body.appendChild(installButton);
 });
+
+    let compassElement = document.getElementById("compass");
+let directionElement = document.getElementById("compass-direction"); // If you want to display direction text
+
+// Check if the browser supports DeviceOrientationEvent
+if (window.DeviceOrientationEvent) {
+  window.addEventListener("deviceorientation", function(event) {
+    const alpha = event.alpha;  // The device's compass heading in degrees
+
+    if (alpha !== null) {
+      // Show the compass when orientation data is available
+      compassElement.style.display = "block";
+      
+      // Convert alpha (heading in degrees) to compass directions (optional)
+      let direction = getCompassDirection(alpha);
+      if (directionElement) {
+        directionElement.textContent = direction; // Display direction text (optional)
+      }
+      
+      // Rotate the compass to match the heading
+      compassElement.style.transform = `rotate(${alpha}deg)`;
+    }
+  });
+} else {
+  console.log("Device orientation is not supported.");
+}
+
+// Function to convert the alpha value (heading in degrees) into compass directions
+function getCompassDirection(alpha) {
+  if (alpha >= 337.5 || alpha < 22.5) {
+    return "North";
+  } else if (alpha >= 22.5 && alpha < 67.5) {
+    return "Northeast";
+  } else if (alpha >= 67.5 && alpha < 112.5) {
+    return "East";
+  } else if (alpha >= 112.5 && alpha < 157.5) {
+    return "Southeast";
+  } else if (alpha >= 157.5 && alpha < 202.5) {
+    return "South";
+  } else if (alpha >= 202.5 && alpha < 247.5) {
+    return "Southwest";
+  } else if (alpha >= 247.5 && alpha < 292.5) {
+    return "West";
+  } else if (alpha >= 292.5 && alpha < 337.5) {
+    return "Northwest";
+  }
+}
 
     function calculatePrayerTimes(lat, lng) {
       const prayTimes = new PrayTimes();
