@@ -29,18 +29,6 @@
     }
 
     h1 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  font-size: 2.5rem;
-  color: #008000;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: 'NizarNastaliqKurdish', sans-serif;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-h1 {
   text-align: center;
   margin-bottom: 20px;
   font-size: 2.5rem;
@@ -50,10 +38,15 @@ h1 {
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-h1 i {
-  display: block; /* Ensures the icon is on its own line */
-  font-size: 3rem; /* Larger size for the icon */
-  margin-bottom: 10px; /* Adds spacing below the icon */
+h1 img {
+  display: block; /* Places the image on its own line */
+  margin: 0 auto 10px; /* Centers the image and adds space below */
+  width: 60px; /* Adjust size as needed */
+  height: auto;
+}
+
+body.dark-mode #mosque-icon {
+  content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
 }
     select {
       padding: 10px 20px;
@@ -259,9 +252,9 @@ h1 i {
     <div id="embeddable-prayer-times">
       
       <h1>
-  <i class="fa-solid fa-mosque"></i>
+  <img id="mosque-icon" src="mosque-solid.svg" alt="Mosque Icon">
   کاتەکانی بانگ لە <span id="city-name"></span>
-</h1>    
+</h1>   
       
       <select id="city-selector">
      
