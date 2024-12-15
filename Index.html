@@ -269,34 +269,6 @@ body.dark-mode #mosque-icon {
   display: none;  /* Initially hidden until orientation is detected */
   transform: rotate(0deg); /* Ensures rotation happens smoothly */
     }
-
-    /* Positioning the compass icon at the top-right */
-.light-mode, .dark-mode {
-    position: fixed;
-    top: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
-    z-index: 1000; /* Ensure it's on top */
-}
-
-/* Show the compass for light mode when in light theme */
-body.light-theme .light-mode {
-    display: block;
-}
-
-/* Hide the compass for light mode when in dark theme */
-body.dark-theme .light-mode {
-    display: none;
-}
-
-/* Show the compass for dark mode when in dark theme */
-body.dark-theme .dark-mode {
-    display: block;
-}
-
-/* Hide the compass for dark mode when in light theme */
-body.light-theme .dark-mode {
-    display: none;
-}
   </style>
 </head>
 
@@ -307,6 +279,13 @@ body.light-theme .dark-mode {
     </div>
 
     <div id="embeddable-prayer-times">
+
+      <div id="compass" class="compass-icon">
+  <!-- Icon for Light Mode (will be shown in normal mode) -->
+  <i id="light-compass" class="fa-solid fa-compass" style="color: #Ffae00;"></i>
+  <!-- Icon for Dark Mode (will be shown in dark mode) -->
+  <i id="dark-compass" class="fa-solid fa-compass" style="color: #FFD43B;"></i>
+</div> 
       
       <h1>
   <img src="mosque-solid.svg">
@@ -334,34 +313,8 @@ body.light-theme .dark-mode {
 
     <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
 
-      <!-- Compass icon for light mode -->
-<i class="fa-solid fa-compass light-mode" style="color: #Ffae00;"></i>
-
-<!-- Compass icon for dark mode -->
-<i class="fa-solid fa-compass dark-mode" style="color: #FFD43B;"></i>
-
   <script src="PrayTimes.js"></script>
   <script>
-// Detect and toggle the theme
-const toggleTheme = () => {
-    if (document.body.classList.contains('light-theme')) {
-        document.body.classList.remove('light-theme');
-        document.body.classList.add('dark-theme');
-    } else {
-        document.body.classList.remove('dark-theme');
-        document.body.classList.add('light-theme');
-    }
-};
-
-// Initialize based on user's preference
-document.body.classList.add(localStorage.getItem('theme') || 'light-theme');
-
-// Optionally, save theme preference to localStorage
-document.body.addEventListener('click', () => {
-    toggleTheme();
-    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme');
-});
-    
     function generateIframeCode() {
   const city = document.getElementById('city-selector').value;
   const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
@@ -697,4 +650,4 @@ function getCompassDirection(alpha) {
   </script>
 </body>
 
-</html>
+    </html>
