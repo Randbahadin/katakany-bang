@@ -38,16 +38,15 @@
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-h1 i {
+h1 img {
   display: block; /* Places the image on its own line */
   margin: 0 auto 10px; /* Centers the image and adds space below */
   width: 60px; /* Adjust size as needed */
   height: auto;
-  color: #Ffae00;
 }
 
-body.dark-mode #i {
-  color: #FFD43B;
+body.dark-mode #mosque-icon {
+  content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
 }
 
     select {
@@ -316,7 +315,7 @@ body.dark-mode #i {
     <div id="embeddable-prayer-times">
       
       <h1>
-  <i class="fa-solid fa-mosque"></i>
+  <img src="mosque-solid.svg">
   کاتەکانی بانگ لە <span id="city-name"></span>
       </h1>    
       
