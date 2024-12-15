@@ -14,20 +14,6 @@
       src: url('NizarNastaliqKurdish.ttf') format('truetype');
     }
 
-    /* Fade-in animation */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-body {
-  animation: fadeIn 1s ease-in-out;
-}
-
     body {
       font-family: 'Noto Sans Kurdish', sans-serif;
       background-color: #f8f9fa;
@@ -254,7 +240,7 @@ body.dark-mode #mosque-icon {
 
     body.intro-done #app-container {
       opacity: 1;
-    }    
+    }
   </style>
 </head>
 
@@ -264,7 +250,7 @@ body.dark-mode #mosque-icon {
       ئەم ماڵپەڕە کوکیز بەکاردەهێنێت بۆ باشترکردنی ئەزموونی بەکارهێنەر. <button id="accept-cookies">قبوڵکردن</button>
     </div>
 
-    <div id="embeddable-prayer-times"> 
+    <div id="embeddable-prayer-times">
       
       <h1>
   <img src="mosque-solid.svg">
@@ -291,14 +277,10 @@ body.dark-mode #mosque-icon {
     <div id="loading">چاوەڕێ دەکرێت...</div>
 
     <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
+  </div>
 
   <script src="PrayTimes.js"></script>
   <script>
-const modeToggle = document.getElementById('mode-toggle');
-modeToggle.addEventListener('click', function () {
-  document.body.classList.toggle('dark-mode');
-});
-    
     function generateIframeCode() {
   const city = document.getElementById('city-selector').value;
   const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
@@ -520,31 +502,6 @@ modeToggle.addEventListener('click', function () {
       console.log("Geolocation is not supported by this browser.");
     }
 
-    let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent the mini-infobar from appearing on mobile
-  e.preventDefault();
-  // Save the event to trigger later
-  deferredPrompt = e;
-
-  // Show a custom install button
-  const installButton = document.createElement('button');
-  installButton.textContent = 'Install App';
-  installButton.onclick = () => {
-    // Show the install prompt
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      }
-      deferredPrompt = null;
-    });
-  };
-
-  document.body.appendChild(installButton);
-});
-   
     function calculatePrayerTimes(lat, lng) {
       const prayTimes = new PrayTimes();
       prayTimes.setMethod('Karachi');
@@ -571,4 +528,4 @@ window.addEventListener('beforeinstallprompt', (e) => {
   </script>
 </body>
 
-    </html>
+</html>
