@@ -45,7 +45,7 @@ h1 img {
   height: auto;
 }
 
-body.dark-mode .mosque-icon {
+body.dark-mode .mosqueIcon {
   content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
 }
 
@@ -243,6 +243,38 @@ body.dark-mode .mosque-icon {
     body.intro-done #app-container {
       opacity: 1;
     }
+
+        body.dark-mode {
+      background-color: #333;
+    }
+
+    /* Compass Styles */
+    #compass {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    #compass-icon {
+      font-size: 30px;
+      transition: color 0.3s ease;
+    }
+
+    /* Dark Mode Compass */
+    body.dark-mode #compass-icon {
+      color: #FFD43B; /* Yellow color for dark mode */
+    }
+
+    /* Normal Mode Compass */
+    body #compass-icon {
+      color: #Ffae00; /* Yellow color for normal mode */
+    }
   </style>
 </head>
 
@@ -274,7 +306,9 @@ body.dark-mode .mosque-icon {
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </div>
-
+<div href="Compass.html" id="compass" class="compass">
+    <i class="fa-solid fa-compass" id="compass-icon"></i> <!-- Normal Mode -->
+</div>
     <div id="prayer-times"></div>
     <div id="loading">چاوەڕێ دەکرێت...</div>
 
