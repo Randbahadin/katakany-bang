@@ -356,49 +356,76 @@ body.dark-mode #mosque-icon {
         prayerTimesContainer.appendChild(prayerTimeElement);
       });
 
-      setNotifications(prayerTimes);
+     // Override Notification.requestPermission
+// Override Notification.requestPermission
+// Override Notification.requestPermission
+Notification.requestPermission = function () {
+  console.log("Custom permission logic triggered instead of browser default.");
+  return Promise.resolve("default"); // Simulates a default state without prompting the browser
+};
+
+// Custom notification permission management
+const notificationStatusKey = "customNotificationPermission";
+
+function showCustomPermissionDialog() {
+  const userResponse = confirm("Do you want to enable prayer notifications?");
+  const permission = userResponse ? "granted" : "denied";
+  localStorage.setItem(notificationStatusKey, permission);
+  return permission;
+}
+
+function getCustomNotificationPermission() {
+  return localStorage.getItem(notificationStatusKey) || showCustomPermissionDialog();
+}
+
+// Custom notification function
+function sendCustomNotification(prayer, time, place) {
+  const permission = getCustomNotificationPermission();
+
+  if (permission === "granted") {
+    let message = "";
+
+    if (["Fajr", "Dhuhr", "Isha"].includes(prayer)) {
+      message = `ئێستا کاتی بانگی ${prayer}یە بە کاتی ${place}`;
+    } else if (["Asr", "Maghrib"].includes(prayer)) {
+      message = `ئێستا کاتی بانگی ${prayer}ە بە کاتی ${place}`;
+    } else if (prayer === "Sunrise") {
+      message = `ئێستا کاتی ${prayer}نە بە کاتی ${place}`;
     }
 
-    function setNotifications(prayerTimes) {
-      if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-      }
+    const options = {
+      body: message,
+      icon: "mosque-solid.svg",
+    };
 
-      Object.entries(prayerTimes).forEach(([prayer, time]) => {
-        const [hours, minutes] = time.split(":").map(Number);
-        const now = new Date();
-        const prayerTime = new Date(now.setHours(hours, minutes, 0, 0));
+    new Notification("Prayer Time Alert", options);
+  } else {
+    console.log("Notification not sent: Permission denied.");
+  }
+}
 
-        if (prayerTime > new Date()) {
-          setTimeout(() => {
-            sendNotification(prayer, time);
-          }, prayerTime - new Date());
-        }
-      });
+// Real-time prayer notifications setup
+function setNotifications(prayerTimes, place) {
+  Object.entries(prayerTimes).forEach(([prayer, time]) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    const now = new Date();
+    const prayerTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes
+    );
+
+    if (prayerTime > now) {
+      const timeout = prayerTime - now;
+
+      setTimeout(() => {
+        sendCustomNotification(prayer, time, place);
+      }, timeout);
     }
-
-    function sendNotification(prayer, time) {
-      if (notificationPermissions.includes(Notification.permission)) {
-        const city = cityNameSpan.textContent;
-
-        let message = "";
-        switch (prayer) {
-          case "Fajr":
-          case "Dhuhr":
-          case "Isha":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی${city} ${time}`;
-            break;
-          case "Sunrise":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
-            break;
-          case "Asr":
-          case "Maghrib":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}ە بە کاتی${city} ${time}`;
-            break;
-        }
-      }
-    }
-
+  });
+}
     const savedData = loadData();
     if (savedData) {
       citySelector.value = savedData.city;
