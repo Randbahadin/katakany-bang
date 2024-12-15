@@ -38,15 +38,16 @@
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-h1 img {
+h1 i {
   display: block; /* Places the image on its own line */
   margin: 0 auto 10px; /* Centers the image and adds space below */
   width: 60px; /* Adjust size as needed */
   height: auto;
+  color: #Ffae00;
 }
 
-body.dark-mode .img {
-  content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
+body.dark-mode .i {
+  color: #FFD43B;
 }
 
     select {
@@ -252,18 +253,46 @@ body.dark-mode .img {
     #compass {
       position: absolute;
       top: 20px;
-      left: 20px;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease-in-out;
+      left: 20px; 
+      background-color: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: rotate 2s linear infinite;
     }
 
     #compass-icon {
       font-size: 30px;
       transition: color 0.3s ease;
+    }
+
+    #compass:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #compass-icon:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* Dark Mode Compass */
@@ -287,7 +316,7 @@ body.dark-mode .img {
     <div id="embeddable-prayer-times">
       
       <h1>
-  <img class="mosqueIcon" src="mosque-solid.svg">
+  <i class="fa-solid fa-mosque"></i>
   کاتەکانی بانگ لە <span id="city-name"></span>
       </h1>    
       
