@@ -238,6 +238,33 @@ body.dark-mode #mosque-icon {
       transition: opacity 1s ease-in-out;
     }
 
+    #compass {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    #compass-icon {
+      font-size: 30px;
+      transition: color 0.3s ease;
+    }
+
+    /* Dark Mode Compass */
+    body.dark-mode #compass-icon {
+      color: #FFD43B; /* Yellow color for dark mode */
+    }
+
+    /* Normal Mode Compass */
+    body #compass-icon {
+      color: #Ffae00; /* Yellow color for normal mode */
+    }
+
     body.intro-done #app-container {
       opacity: 1;
     }
@@ -277,6 +304,9 @@ body.dark-mode #mosque-icon {
     <div id="loading">چاوەڕێ دەکرێت...</div>
 
     <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
+      <div id="compass" class="compass">
+    <i class="fa-solid fa-compass" id="compass-icon"></i> <!-- Normal Mode -->
+      </div>
   </div>
 
   <script src="PrayTimes.js"></script>
@@ -389,7 +419,7 @@ body.dark-mode #mosque-icon {
             message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی${city} ${time}`;
             break;
           case "Sunrise":
-            message = `کاتی بانگی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
+            message = 'کاتی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
             break;
           case "Asr":
           case "Maghrib":
