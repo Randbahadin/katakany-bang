@@ -29,25 +29,14 @@
     }
 
     h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2.5rem;
-  color: #008000;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: 'NizarNastaliqKurdish', sans-serif;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: #008000;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-family: 'NizarNastaliqKurdish', sans-serif;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
 
-h1 img {
-  display: block; /* Places the image on its own line */
-  margin: 0 auto 10px; /* Centers the image and adds space below */
-  width: 60px; /* Adjust size as needed */
-  height: auto;
-}
-
-body.dark-mode #mosque-icon {
-  content: url('mosque-solid-gold.svg'); /* Switches to gold icon in dark mode */
-}
     select {
       padding: 10px 20px;
       font-size: 18px;
@@ -250,15 +239,8 @@ body.dark-mode #mosque-icon {
     </div>
 
     <div id="embeddable-prayer-times">
-      
-      <h1>
-  <img src="mosque-solid.svg">
-  کاتەکانی بانگ لە <span id="city-name"></span>
-</h1>   
-      
-      <select id="city-selector">
-     
-        <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
+      <h1><i class="fa-solid fa-mosque"></i> کاتەکانی بانگ لە <span id="city-name"></span></h1>    <select id="city-selector">
+      <option value="" disabled selected>شوێنەکەت دیاری بکە</option>
       <option value="Sulaimany">سلێمانی</option>
       <option value="Duhok">دهۆک</option>
       <option value="Hawler">هەولێر</option>
@@ -356,76 +338,49 @@ body.dark-mode #mosque-icon {
         prayerTimesContainer.appendChild(prayerTimeElement);
       });
 
-     // Override Notification.requestPermission
-// Override Notification.requestPermission
-// Override Notification.requestPermission
-Notification.requestPermission = function () {
-  console.log("Custom permission logic triggered instead of browser default.");
-  return Promise.resolve("default"); // Simulates a default state without prompting the browser
-};
-
-// Custom notification permission management
-const notificationStatusKey = "customNotificationPermission";
-
-function showCustomPermissionDialog() {
-  const userResponse = confirm("Do you want to enable prayer notifications?");
-  const permission = userResponse ? "granted" : "denied";
-  localStorage.setItem(notificationStatusKey, permission);
-  return permission;
-}
-
-function getCustomNotificationPermission() {
-  return localStorage.getItem(notificationStatusKey) || showCustomPermissionDialog();
-}
-
-// Custom notification function
-function sendCustomNotification(prayer, time, place) {
-  const permission = getCustomNotificationPermission();
-
-  if (permission === "granted") {
-    let message = "";
-
-    if (["Fajr", "Dhuhr", "Isha"].includes(prayer)) {
-      message = `ئێستا کاتی بانگی ${prayer}یە بە کاتی ${place}`;
-    } else if (["Asr", "Maghrib"].includes(prayer)) {
-      message = `ئێستا کاتی بانگی ${prayer}ە بە کاتی ${place}`;
-    } else if (prayer === "Sunrise") {
-      message = `ئێستا کاتی ${prayer}نە بە کاتی ${place}`;
+      setNotifications(prayerTimes);
     }
 
-    const options = {
-      body: message,
-      icon: "mosque-solid.svg",
-    };
+    function setNotifications(prayerTimes) {
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
 
-    new Notification("Prayer Time Alert", options);
-  } else {
-    console.log("Notification not sent: Permission denied.");
-  }
-}
+      Object.entries(prayerTimes).forEach(([prayer, time]) => {
+        const [hours, minutes] = time.split(":").map(Number);
+        const now = new Date();
+        const prayerTime = new Date(now.setHours(hours, minutes, 0, 0));
 
-// Real-time prayer notifications setup
-function setNotifications(prayerTimes, place) {
-  Object.entries(prayerTimes).forEach(([prayer, time]) => {
-    const [hours, minutes] = time.split(":").map(Number);
-    const now = new Date();
-    const prayerTime = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      hours,
-      minutes
-    );
-
-    if (prayerTime > now) {
-      const timeout = prayerTime - now;
-
-      setTimeout(() => {
-        sendCustomNotification(prayer, time, place);
-      }, timeout);
+        if (prayerTime > new Date()) {
+          setTimeout(() => {
+            sendNotification(prayer, time);
+          }, prayerTime - new Date());
+        }
+      });
     }
-  });
-}
+
+    function sendNotification(prayer, time) {
+      if (notificationPermissions.includes(Notification.permission)) {
+        const city = cityNameSpan.textContent;
+
+        let message = "";
+        switch (prayer) {
+          case "Fajr":
+          case "Dhuhr":
+          case "Isha":
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}یە بە کاتی${city} ${time}`;
+            break;
+          case "Sunrise":
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}نە بە کاتی${city} ${time}`;
+            break;
+          case "Asr":
+          case "Maghrib":
+            message = `کاتی بانگی ${prayerNamesKu[prayer]}ە بە کاتی${city} ${time}`;
+            break;
+        }
+      }
+    }
+
     const savedData = loadData();
     if (savedData) {
       citySelector.value = savedData.city;
