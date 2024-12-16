@@ -338,13 +338,14 @@ body.dark-mode #mosque-icon {
     <div id="prayer-times"></div>
     <div id="loading">چاوەڕێ دەکرێت...</div>
     <button id="mode-toggle"><i class="fa-solid fa-moon"></i></button> 
-      <div onclick="openCompass" class="compass"><i class="fa-solid fa-compass" id="compass-icon"></i></div><div onclick="openCompass" class="compass"><i class="fa-solid fa-compass" id="compass-icon"></i></div>
+      <p onclick="openCompass" id="compass" class="compass">
+        <i class="fa-solid fa-compass" id="compass-icon"></i></p>
   </div>
 
   <script src="PrayTimes.js"></script>
   <script>
 function openCompass() {
-  window.open('compass.html'); // Opens compass.html in a new tab
+  window.open("compass.html", "_blank");
 }
     
     function generateIframeCode() {
