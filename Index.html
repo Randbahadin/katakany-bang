@@ -334,9 +334,9 @@ body.dark-mode #mosque-icon {
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </div>
-<div href="Compass.html" id="compass" class="compass">
+<button onclick="openCompass" class="compass">
     <i class="fa-solid fa-compass" id="compass-icon"></i> <!-- Normal Mode -->
-</div>
+</button>
     <div id="prayer-times"></div>
     <div id="loading">چاوەڕێ دەکرێت...</div>
 
@@ -345,6 +345,10 @@ body.dark-mode #mosque-icon {
 
   <script src="PrayTimes.js"></script>
   <script>
+function openCompass() {
+  window.open('compass.html', '_blank'); // Opens compass.html in a new tab
+}
+    
     function generateIframeCode() {
   const city = document.getElementById('city-selector').value;
   const darkMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : '';
